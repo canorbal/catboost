@@ -319,6 +319,79 @@ void TRMSEMetric::GetBestValue(EMetricBestValue* valueType, float*) const {
     *valueType = EMetricBestValue::Min;
 }
 
+/* LqLogLoss */
+
+namespace {
+    struct TLqLogLossMetric: public TAdditiveMetric<TLqLogLossMetric> {
+        explicit TLqLogLossMetric(double q)
+            : Q(q) {
+            CB_ENSURE(Q > 0., "Q must be positive");
+            CB_ENSURE(Q <= 1., "Q must be less or equal 1.");
+        }
+
+        TMetricHolder EvalSingleThread(
+                const TVector<TVector<double>>& approx,
+                TConstArrayRef<float> target,
+                TConstArrayRef<float> weight,
+                TConstArrayRef<TQueryInfo> queriesInfo,
+                int begin,
+                int end
+        ) const;
+
+        TString GetDescription() const override;
+        void GetBestValue(EMetricBestValue* valueType, float* bestValue) const override;
+
+    private:
+        double Q;
+    };
+}
+
+
+THolder<IMetric> MakeLqLogLossMetric(double q) {
+    return MakeHolder<TLqLogLossMetric>(q);
+}
+
+TMetricHolder TLqLogLossMetric::EvalSingleThread(
+        const TVector<TVector<double>>& approx,
+        TConstArrayRef<float> target,
+        TConstArrayRef<float> weight,
+        TConstArrayRef<TQueryInfo> /*queriesInfo*/,
+        int begin,
+        int end
+) const {
+    CB_ENSURE(approx.size() == 1, "Metric Lq supports only single-dimensional data");
+
+    const auto& approxVec = approx.front();
+    Y_ASSERT(approxVec.size() == target.size());
+
+    TMetricHolder error(2);
+
+    for (int k = begin; k < end; ++k) {
+        float w = weight.empty() ? 1 : weight[k];
+
+        double loss = 0.;
+
+        if (target[k] == 1.) {
+            loss = 1 - std::pow(approxVec[k] / (1 + approxVec[k]), Q);
+        } else {
+            loss = 1 - std::pow(1 / (1 + approxVec[k]), Q);
+        }
+
+        error.Stats[0] += loss * w;
+        error.Stats[1] += w;
+    }
+    return error;
+}
+
+TString TLqLogLossMetric::GetDescription() const {
+    CB_ENSURE(false, "not implemented");
+}
+
+void TLqLogLossMetric::GetBestValue(EMetricBestValue* valueType, float*) const {
+    *valueType = EMetricBestValue::Min;
+}
+
+
 /* Lq */
 
 namespace {
