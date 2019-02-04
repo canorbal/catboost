@@ -3309,6 +3309,12 @@ static TVector<THolder<IMetric>> CreateMetric(ELossFunction metric, TMap<TString
             validParams = {"border"};
             break;
 
+        case ELossFunction::LqLogLoss:
+            CB_ENSURE(params.contains("q"), "Metric " << ELossFunction::Lq << " requirese q as parameter");
+            validParams={"q"};
+            result.push_back(MakeLqLogLossMetric(FromString<float>(params.at("q"))));
+            break;
+
         case ELossFunction::CrossEntropy:
             result.push_back(MakeCrossEntropyMetric(ELossFunction::CrossEntropy));
             break;
