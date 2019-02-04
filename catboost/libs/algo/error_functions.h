@@ -173,6 +173,46 @@ public:
     ) const override;
 };
 
+
+class TLqLogLoss final : public IDerCalcer {
+public:
+
+    const double Q;
+
+    explicit TLqLogLoss(double q, bool isExpApprox)
+    : IDerCalcer(isExpApprox), Q(q)
+    {
+        Y_ASSERT(Q > 0.)
+        Y_ASSERT(Q <= 1.)
+    }
+
+private:
+    double CaclDer(double approx, float target) const override
+    {
+
+        const double expApprox = fast_exp(approx);
+        const double p = Logistic(approx);
+
+        if (target == 1.) {
+            return -Q * std::pow(p, Q) / (expApprox + 1);
+        }
+
+        return Q * expApprox * std::pow(1 - p, Q + 1);
+    }
+
+    double CalcDer2(double approx, float target) const override {
+        const double expApprox = fast_exp(approx);
+        const double p = Logistic(approx);
+
+        if (target == 1.) {
+            return Q * std::pow(p, Q) * (expApprox - Q) / std::pow(expApprox + 1, 2);
+        }
+
+        return Q * std::pow(1 - p, Q + 2) * (Q * expApprox - 1) / expApprox;
+    }
+
+};
+
 class TRMSEError final : public IDerCalcer {
 public:
     static constexpr double RMSE_DER2 = -1.0;
