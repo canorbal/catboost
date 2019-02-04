@@ -384,7 +384,8 @@ TMetricHolder TLqLogLossMetric::EvalSingleThread(
 }
 
 TString TLqLogLossMetric::GetDescription() const {
-    CB_ENSURE(false, "not implemented");
+    TMetricParam<double> q("q", Q, true);
+    return BuildDescription(ELossFunction::LqLogLoss, UseWeights, "%.3g", q);
 }
 
 void TLqLogLossMetric::GetBestValue(EMetricBestValue* valueType, float*) const {
