@@ -185,6 +185,8 @@ THolder<IMetric> MakeCrossEntropyMetric(
     ELossFunction lossFunction,
     double border = GetDefaultClassificationBorder());
 
+THolder<IMetric> MakeLqLogLossMetric(double q);
+
 THolder<IMetric> MakeCtrFactorMetric(double border = GetDefaultClassificationBorder());
 
 THolder<IMetric> MakeRMSEMetric();
