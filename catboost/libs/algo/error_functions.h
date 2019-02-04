@@ -179,16 +179,15 @@ public:
 
     const double Q;
 
-    explicit TLqLogLoss(double q, bool isExpApprox)
+    TLqLogLoss(double q, bool isExpApprox)
     : IDerCalcer(isExpApprox), Q(q)
     {
-        Y_ASSERT(Q > 0.)
-        Y_ASSERT(Q <= 1.)
+        CB_ENSURE(Q > 0, "q value must be positive");
+        CB_ENSURE(Q <= 1., "q value must be less than 1.");
     }
 
 private:
-    double CaclDer(double approx, float target) const override
-    {
+    double CalcDer(double approx, float target) const override {
 
         const double expApprox = fast_exp(approx);
         const double p = Logistic(approx);
