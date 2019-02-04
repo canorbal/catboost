@@ -210,9 +210,9 @@ private:
         return Q * std::pow(1 - p, Q + 2) * (Q * expApprox - 1) / expApprox;
     }
 
-    double CalcDer3(double approx, float target) const override {
-        CB_ENSURE(false, "Not implemented");
-    }
+//    double CalcDer3(double approx, float target) const override {
+//        CB_ENSURE(false, "Not implemented");
+//    }
 
 };
 

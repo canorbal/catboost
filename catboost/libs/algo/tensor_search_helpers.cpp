@@ -11,6 +11,8 @@ THolder<IDerCalcer> BuildError(
         case ELossFunction::Logloss:
         case ELossFunction::CrossEntropy:
             return MakeHolder<TCrossEntropyError>(isStoreExpApprox);
+        case ELossFunction::LqLogLoss:
+            return MakeHolder<TLqLogLoss>(NCatboostOptions::GetLqParam(params.LossFunctionDescription), isStoreExpApprox);
         case ELossFunction::RMSE:
             return MakeHolder<TRMSEError>(isStoreExpApprox);
         case ELossFunction::MAE:

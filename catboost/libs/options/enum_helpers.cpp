@@ -10,9 +10,9 @@
 TConstArrayRef<ELossFunction> GetAllObjectives() {
     static TVector<ELossFunction> allObjectives = {
         ELossFunction::Logloss, ELossFunction::CrossEntropy, ELossFunction::RMSE,
-        ELossFunction::MAE, ELossFunction::Quantile, ELossFunction::LogLinQuantile,
-        ELossFunction::MAPE, ELossFunction::Poisson, ELossFunction::MultiClass,
-        ELossFunction::MultiClassOneVsAll, ELossFunction::PairLogit,
+        ELossFunction::LqLogLoss, ELossFunction::MAE, ELossFunction::Quantile,
+        ELossFunction::LogLinQuantile, ELossFunction::MAPE, ELossFunction::Poisson,
+        ELossFunction::MultiClass, ELossFunction::MultiClassOneVsAll, ELossFunction::PairLogit,
         ELossFunction::PairLogitPairwise, ELossFunction::YetiRank, ELossFunction::YetiRankPairwise,
         ELossFunction::QueryRMSE, ELossFunction::QuerySoftMax, ELossFunction::QueryCrossEntropy,
         ELossFunction::Lq};
@@ -45,6 +45,7 @@ bool IsMultiDimensionalError(ELossFunction lossFunction) {
 bool IsForCrossEntropyOptimization(ELossFunction lossFunction) {
     return (lossFunction == ELossFunction::Logloss ||  // binary classification metrics
             lossFunction == ELossFunction::CrossEntropy ||
+            lossFunction == ELossFunction::LqLogLoss ||
             lossFunction == ELossFunction::Precision ||
             lossFunction == ELossFunction::Recall ||
             lossFunction == ELossFunction::F1 ||
