@@ -377,7 +377,7 @@ TMetricHolder TLqLogLossMetric::EvalSingleThread(
             loss = 1 - std::pow(1 / (1 + approxVec[k]), Q);
         }
 
-        error.Stats[0] += loss * w;
+        error.Stats[0] += loss * w / Q;
         error.Stats[1] += w;
     }
     return error;
@@ -3311,7 +3311,7 @@ static TVector<THolder<IMetric>> CreateMetric(ELossFunction metric, TMap<TString
             break;
 
         case ELossFunction::LqLogLoss:
-            CB_ENSURE(params.contains("q"), "Metric " << ELossFunction::Lq << " requirese q as parameter");
+            CB_ENSURE(params.contains("q"), "Metric " << ELossFunction::LqLogLoss << " requirese q as parameter");
             validParams={"q"};
             result.push_back(MakeLqLogLossMetric(FromString<float>(params.at("q"))));
             break;
