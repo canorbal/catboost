@@ -78,6 +78,8 @@ static TEvaluateDerivativesFunc GetEvaluateDerivativesFunc(ELossFunction lossFun
         case ELossFunction::Logloss:
         case ELossFunction::CrossEntropy:
             return EvaluateDerivativesForError<TCrossEntropyError>;
+        case ELossFunction::LqLogLoss:
+            return EvaluateDerivativesForError<TLqLogLoss>;
         case ELossFunction::RMSE:
             return EvaluateDerivativesForError<TRMSEError>;
         case ELossFunction::MAE:

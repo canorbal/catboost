@@ -179,7 +179,7 @@ public:
 
     const double Q;
 
-    TLqLogLoss(double q, bool isExpApprox)
+    TLqLogLoss(double q=0.5, bool isExpApprox=false)
     : IDerCalcer(isExpApprox), Q(q)
     {
         CB_ENSURE(Q > 0, "q value must be positive");
