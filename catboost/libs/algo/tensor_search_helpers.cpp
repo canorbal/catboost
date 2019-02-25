@@ -11,8 +11,11 @@ THolder<IDerCalcer> BuildError(
         case ELossFunction::Logloss:
         case ELossFunction::CrossEntropy:
             return MakeHolder<TCrossEntropyError>(isStoreExpApprox);
-        case ELossFunction::LqLogLoss:
-            return MakeHolder<TLqLogLoss>(NCatboostOptions::GetLqParam(params.LossFunctionDescription), isStoreExpApprox);
+        case ELossFunction::LqLogLoss: {
+            const auto& lossParams = params.LossFunctionDescription->GetLossParams();
+            CB_ENSURE(lossParams.begin()->first == "q", "Invalid loss description" << ToString(params.LossFunctionDescription.Get()));
+            return MakeHolder<TLqLogLoss>(FromString<float>(lossParams.at("q")), isStoreExpApprox);
+        }
         case ELossFunction::RMSE:
             return MakeHolder<TRMSEError>(isStoreExpApprox);
         case ELossFunction::MAE:

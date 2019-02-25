@@ -36,14 +36,6 @@ void NCatboostOptions::TCatBoostOptions::SetLeavesEstimationDefault() {
             defaultGradientIterations = 1;
             break;
         }
-        case ELossFunction::LqLogLoss: {
-            CB_ENSURE(lossFunctionConfig.GetLossParams().contains("q"), "Param q is mandatory for LqLogLoss");
-            defaultEstimationMethod = ELeavesEstimation::Newton;
-            defaultNewtonIterations = 1;
-            defaultGradientIterations = 1;
-            break;
-        }
-
         case ELossFunction::Lq: {
             CB_ENSURE(lossFunctionConfig.GetLossParams().contains("q"), "Param q is mandatory for Lq loss");
             defaultEstimationMethod = ELeavesEstimation::Newton;
@@ -109,6 +101,7 @@ void NCatboostOptions::TCatBoostOptions::SetLeavesEstimationDefault() {
             break;
         }
         case ELossFunction::Logloss:
+        case ELossFunction::LqLogLoss:
         case ELossFunction::CrossEntropy: {
             defaultNewtonIterations = 10;
             defaultGradientIterations = 40;

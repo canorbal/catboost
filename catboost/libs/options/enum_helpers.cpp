@@ -114,7 +114,8 @@ bool IsOnlyForCrossEntropyOptimization(ELossFunction lossFunction) {
 bool IsBinaryClassMetric(ELossFunction lossFunction) {
     return (IsOnlyForCrossEntropyOptimization(lossFunction) ||
             lossFunction == ELossFunction::BrierScore ||
-            lossFunction == ELossFunction::HingeLoss);
+            lossFunction == ELossFunction::HingeLoss ||
+            lossFunction == ELossFunction::LqLogLoss);
 }
 
 bool IsMultiClassMetric(ELossFunction lossFunction) {

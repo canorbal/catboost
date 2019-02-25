@@ -369,15 +369,10 @@ TMetricHolder TLqLogLossMetric::EvalSingleThread(
     for (int k = begin; k < end; ++k) {
         float w = weight.empty() ? 1 : weight[k];
 
-        double loss = 0.;
+        double sigmoid = 1. / (1. + exp(-approxVec[k]));
+        double prob = (target[k] > 0) ? sigmoid : 1 - sigmoid;
 
-        if (target[k] == 1.) {
-            loss = 1 - std::pow(approxVec[k] / (1 + approxVec[k]), Q);
-        } else {
-            loss = 1 - std::pow(1 / (1 + approxVec[k]), Q);
-        }
-
-        error.Stats[0] += loss * w / Q;
+        error.Stats[0] += (1 - std::pow(prob, Q)) / Q;
         error.Stats[1] += w;
     }
     return error;

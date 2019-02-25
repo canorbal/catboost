@@ -182,6 +182,7 @@ public:
     TLqLogLoss(double q=0.5, bool isExpApprox=false)
     : IDerCalcer(isExpApprox), Q(q)
     {
+        Y_ASSERT(!isExpApprox);
         CB_ENSURE(Q > 0, "q value must be positive");
         CB_ENSURE(Q <= 1., "q value must be less than 1.");
     }
