@@ -210,7 +210,7 @@ private:
             return Q * std::pow(p, Q) * (expApprox - Q) / std::pow(expApprox + 1, 2);
         }
 
-        return Q * std::pow(1 - p, Q + 2) * (Q * expApprox - 1) / expApprox;
+        return -Q * std::pow(1 - p, Q + 2) * (Q * expApprox - 1) / expApprox;
     }
 
 //    double CalcDer3(double approx, float target) const override {
