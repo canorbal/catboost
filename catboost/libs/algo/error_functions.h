@@ -191,7 +191,9 @@ private:
     double CalcDer(double approx, float target) const override {
 
         const double expApprox = fast_exp(approx);
-        const double p = Logistic(approx);
+        const double p = 1. / (1. + exp(-approx));
+//        const double p = Logistic(approx);
+
 
         if (target == 1.) {
             return -Q * std::pow(p, Q) / (expApprox + 1);

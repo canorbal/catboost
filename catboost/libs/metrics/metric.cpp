@@ -372,7 +372,7 @@ TMetricHolder TLqLogLossMetric::EvalSingleThread(
         double sigmoid = 1. / (1. + exp(-approxVec[k]));
         double prob = (target[k] > 0) ? sigmoid : 1 - sigmoid;
 
-        error.Stats[0] += (1 - std::pow(prob, Q)) / Q;
+        error.Stats[0] += w * (1 - std::pow(prob, Q)) / Q;
         error.Stats[1] += w;
     }
     return error;
